@@ -1,4 +1,3 @@
-import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.*;
 import java.awt.Color;
@@ -19,6 +18,20 @@ public class Spielfeld {
         roboter = new Roboter();
         leinwand = new Leinwand(spielLaenge,spielBreite,Color.white);
     }
+    /*
+    Erstellen Sie die Methode Punkt[] punkteEingeben(). Der Benutzer soll zunaechst
+    ueber die Konsole eingeben, wie viele Punkte er haben moechte. Anschliessend soll er die Koordinaten der Punkte
+    eingeben.
+    Die Punkte werden in einem Array gespeichert, das als Rueckgabewert der Methode zurueckgegeben wird.
+    Zu Beginn soll sich der Roboter in der linken oberen Ecke des Spielfelds befinden, d.h. der
+    Punkt (0,0) ist der erste Punkt des Arrays
+    Mit der Methode nextInt() koennen Sie die Koordinaten eines Punktes
+    als einzelne Ganzzahlwerte einlesen.
+    Alle eingegebenen Punkte muessen im Spielfeld liegen. Machen Sie den Benutzer darauf aufmerksam, wenn er einen
+    ungueltigen Wert eingibt.
+    Gehen Sie in dieser Uebung davon aus, dass
+    der Benutzer nur ganze Zahlen eingibt, aber keine Buchstaben oder Sonderzeichen.
+    */
 
     public Punkt[] punkteEingeben() {
         int zahl;
@@ -37,13 +50,18 @@ public class Spielfeld {
                 System.out.println("der " + i + ". Punkt ist: ");
                 poi[i].ausgabeAttribute();
             }
-        }catch(InputMismatchException e){
-                System.out.println("Bitten Sie daher nur Ganzzahlen eingeben! \n" + e);
-                System.exit(0);
-            }
+        }catch(InputMismatchException e){//The catch statement allows you to define a block of code to be executed, if an error occurs in the try block.
+            System.out.println("Bitten Sie daher nur Ganzzahlen eingeben! \n" + e);
+            System.exit(0);
+        }
 
         return poi;
     }
+    /*
+    ich habe dager eine index und Arraylist benutzt
+    um die Punkte einfacher zu sortieren.
+    Methode:Bubblesort
+    */
 
     public ArrayList<Punkt> poiSortieren(Punkt[] poi) {
         for(int i = 0; i<poi.length;i++){
@@ -67,7 +85,10 @@ public class Spielfeld {
         }
         return poiSort;
     }
-
+    /*
+     * Methode poiAbfahren(), in der der Benutzer zunaechst
+     * die Punkte eingeben kann und anschliessend der kuerzeste Weg berechnet wird
+     */
     public double poiAbfahren() {
         double ganzDistanz = 0;
         for (int i = 1; i < poiSort.size(); i++) {
@@ -79,6 +100,10 @@ public class Spielfeld {
 
 
     public ArrayList<Rechteck> hindernislisteErzeugen() {
+        /*Daher habe ich ein "künstliche Index" erstellt.
+           denn das braucht man gleichzeiitig zwei for-Schleife ausführen
+           Eins ist für Hindernisse, die Andere ist für die Urteilung,
+           ob es überlappt ist.*/
         int hinderX;
         int hinderY;
         Punkt hinderPosition;
@@ -88,11 +113,11 @@ public class Spielfeld {
         String hinderBezeichnung;
         hindernisListe = new ArrayList<Rechteck>();
         int hindernisZahl = 0;
-        int arrayIndex = 0;
+        int arrayIndex = 0;//man muss daher noch ein index zu schaffen.
         int arrayUeberlapptIndex = 0;
-        int maximalHindernisZahl = 50;
+        int maximalHindernisZahl = 500;
         try {
-            Scanner h = new Scanner(System.in);
+            Scanner h = new Scanner(System.in);//mittels scanner ueber Konsole werte zuweisen
             System.out.println("die Hindersniszahl ist " + h);
             hindernisZahl = h.nextInt();
             if(hindernisZahl > maximalHindernisZahl) {
@@ -105,11 +130,11 @@ public class Spielfeld {
         }
 
         while(arrayIndex < hindernisZahl) {
-            //这里就给了个简单的数字，如果需要因画板长度而随机改变则回来改成画板长度对应的的参数！
+
             hinderX = zufallszahl(5, spielBreite-100);
             hinderY = zufallszahl(5, spielLaenge-100);
-            hinderBreite = zufallszahl(50, 400);
-            hinderLaenge = zufallszahl(50, 400);
+            hinderBreite = zufallszahl(50, 100);
+            hinderLaenge = zufallszahl(50, 100);
             hinderPosition = new Punkt(hinderX, hinderY);
             hinderFarbe = zufallsfarbe();
             hinderBezeichnung = "Rechteck" + String.valueOf(arrayIndex+1);
@@ -129,7 +154,10 @@ public class Spielfeld {
         System.out.println("Es wird "+ hindernisListe.size() +" Hindernisse erzeugt");
         return hindernisListe;
     }
-
+    /*
+    * Diese Methoden erzeugen eine zufaellige Anzahl an Rechtecken, in zufaelligen Farben und ueberpruefen die
+    Ueberlappung dieser.
+    */
     public int zufallszahl(int von, int bis) {
         Random r = new Random();
         return r.nextInt(bis - von) + 1;
@@ -145,9 +173,17 @@ public class Spielfeld {
         leinwand.zeichnen(hindernisListe,roboter,poiSort);
     }
 
+    /*
+     * Der Roboter soll sich zu Beginn oben links
+     * auf dem Spielfeld befinden und sich schrittweise nach unten und nach rechts bis zum
+     * Spielfeldrand bewegen. Dabei soll er dieHindernisse umfahren.
+     * Falls die Hindernisse so eng bei einander stehen,
+     * dass der Roboter nicht zwischen ihnen hindurch fahren
+     * kann, soll er stehen bleiben.
+     */
 
     public static void hindernisseUmfahren() {
-      /*
+        /*
        die Method daher ist;
        ich habe in dem Klass Roboter ein "int" heißt Geschwindigkeit geschafft
        Und Mit die Veränderung von Geschwindigkeit von verschiedene Sitiation um
@@ -156,12 +192,12 @@ public class Spielfeld {
         roboter.setRoboterGeschwindigkeitY(1);
         if (roboter.maxX() < 780 & roboter.maxY() < 750) {
             for (Rechteck rechteck : hindernisListe) {
-                if (roboter.ZuNah_untereKante(rechteck) || roboter.getPosition().getY() > 750) {
+                if (roboter.ZuNah_untere(rechteck) || roboter.getPosition().getY() > 750) {
                     roboter.setRoboterGeschwindigkeitY(0);
-                } else if (roboter.ZuNah_rechteKante(rechteck) ||
+                } else if (roboter.ZuNah_rechte(rechteck) ||
                         roboter.getPosition().getX() > 780) {
                     roboter.setRoboterGeschwindigkeitX(0);
-                } else if (roboter.ZuNah_rechteKante(rechteck) && roboter.ZuNah_untereKante(rechteck)
+                } else if (roboter.ZuNah_rechte(rechteck) && roboter.ZuNah_untere(rechteck)
                         || roboter.getPosition().getY() > 750 && roboter.getPosition().getX() > 780) {
                     roboter.setRoboterGeschwindigkeitX(0);
                     roboter.setRoboterGeschwindigkeitY(0);
@@ -170,11 +206,8 @@ public class Spielfeld {
             roboter.setPosition(new Punkt(    roboter.getPosition().getX() + roboter.getRoboterGeschwindigkeitX(),
                     roboter.getPosition().getY() + roboter.getRoboterGeschwindigkeitY()));
         }
-            roboter.setPosition(new Punkt(    roboter.getPosition().getX() + roboter.getRoboterGeschwindigkeitX(),
-                    roboter.getPosition().getY() + roboter.getRoboterGeschwindigkeitY()));
-        }
 
-
+    }
 
     public static void kurzenWegabfahren() {
         //diese Method ist noch problematisch
@@ -201,11 +234,11 @@ public class Spielfeld {
                     roboter.setRoboterGeschwindigkeitY(0);
                 }
                 if(roboter.getPosition().getX()-poiSort.get(i).getX() == 0
-                            && roboter.getPosition().getY()-poiSort.get(i).getY() == 0
-                            && roboter.getPosition().gibAbstand(poiSort.get(poiSort.size()-1))!=0 ){
+                        && roboter.getPosition().getY()-poiSort.get(i).getY() == 0
+                        && roboter.getPosition().gibAbstand(poiSort.get(poiSort.size()-1))!=0 ){
                     // 4 Richtung:Linksoben,linksunten,rechtsoben,rechtsunten
                     if(roboter.getPosition().getX()>poiSort.get(i+1).getX()&&
-                        roboter.getPosition().getY()>poiSort.get(i+1).getY()){
+                            roboter.getPosition().getY()>poiSort.get(i+1).getY()){
                         roboter.setRoboterGeschwindigkeitX(-1);
                         roboter.setRoboterGeschwindigkeitY(-1);
                     }//linksoben
@@ -254,10 +287,9 @@ public class Spielfeld {
                 }
             }
             roboter.setPosition(new Punkt(roboter.getPosition().getX()+roboter.getRoboterGeschwindigkeitX(),
-                                            roboter.getPosition().getY()+roboter.getRoboterGeschwindigkeitY()));
+                    roboter.getPosition().getY()+roboter.getRoboterGeschwindigkeitY()));
         }
     }
-
 }
 
 
