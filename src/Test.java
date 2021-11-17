@@ -44,8 +44,5 @@ public class Test {
         punkts.add(0,punkt);
         spielfeld.zeichnen(rechtecks, roboter, punkts);
         spielfeld.hindernisseUmfahren();*/
-
-        Spielfeld spielfeld = new Spielfeld();
-        spielfeld.punkteEingeben();
     }
 }
