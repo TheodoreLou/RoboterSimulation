@@ -73,25 +73,9 @@ public class Roboter extends Kreis{
                         break;
                     case UMFAHREN:
                         if(frage.contains("UMFAHREN")) {
+                            //这个是调用最短路径的方法
                             Spielfeld s = new Spielfeld();
-                            //Punkt[] punkten = s.punkteEingeben();
-                            Rechteck rechteck = new Rechteck(new Punkt(400,400),200,200,"a", Color.BLACK);
-                            //ArrayList<Rechteck> rechtecks1 = new ArrayList<>();
-                            ArrayList<Rechteck> rechtecks = s.hindernislisteErzeugen();
-                            //rechtecks1.add(0,rechteck);
-                            ArrayList<Punkt> poiSort = new ArrayList<>();
-                            poiSort.add(new Punkt(0,0));
-                            //for(Punkt punkt : poiSort){
-                            //   punkt.ausgabeAttribute();
-                            //}
-                            s.zeichnen(rechtecks, this , poiSort);
-                            s.hindernisseUmfahren();
-
-                            //Spielfeld.hindernisseUmfahren();
-                        }
-                    case PUNKTE:
-                        if(frage.contains("PUNKTE")) {
-                            Spielfeld s = new Spielfeld();
+                            Roboter roboter = new Roboter();
                             Rechteck rechteck = new Rechteck(new Punkt(400,400),0,0,"a", Color.BLACK);
                             ArrayList<Rechteck> rechtecks1 = new ArrayList<>();
                             rechtecks1.add(0,rechteck);
@@ -99,8 +83,13 @@ public class Roboter extends Kreis{
                             for(Punkt punkt : poiSort){
                                 punkt.ausgabeAttribute();
                             }
-                            s.zeichnen(rechtecks1, this , poiSort);
+                            s.zeichnen(rechtecks1,  roboter, poiSort);
                             s.kurzenWegabfahren();
+
+                        }
+                    case PUNKTE:
+                        if(frage.contains("PUNKTE")) {
+
                         }
                 /* Verwenden Sie eine Switch-Case-Ver-zweigung,
                 um dem gefundenen Stichwort

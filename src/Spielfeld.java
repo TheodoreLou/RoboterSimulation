@@ -36,23 +36,31 @@ public class Spielfeld {
     public Punkt[] punkteEingeben() {
         int zahl;
         Scanner poizahl = new Scanner(System.in);
+        Scanner punktX = new Scanner(System.in);
+        Scanner punktY = new Scanner(System.in);
         try {
             System.out.println("Bitte geben Sie ein Ganzzahl für die Punkte des Weg von Roboter.");
             zahl = poizahl.nextInt();
             poi = new Punkt[zahl + 1];
             poi[0] = new Punkt(0, 0);
-            Scanner x = new Scanner(System.in);
-            Scanner y = new Scanner(System.in);
             System.out.println("Bitte geben Sie den ersten Punkt~");
             for (int i = 1; i < zahl + 1; i++) {
-                Punkt p = new Punkt(x.nextInt(), y.nextInt());
+                int x = punktX.nextInt();
+                int y = punktY.nextInt();
+                Punkt p = new Punkt(x, y);
+                if(x < 0||y < 0){
+                    System.out.println("die Zahl muss eine positive Zahl sein!");
+                    System.exit(0);
+                }else if(x > 800 || y > 800){
+                    System.out.println("der Punkt ist außer der Leinwand!");
+                    System.exit(0);
+                }
                 poi[i] = p;
                 System.out.println("der " + i + ". Punkt ist: ");
                 poi[i].ausgabeAttribute();
             }
         }catch(InputMismatchException e){//The catch statement allows you to define a block of code to be executed, if an error occurs in the try block.
             System.out.println("Bitten Sie daher nur Ganzzahlen eingeben! \n" + e);
-            System.exit(0);
         }
 
         return poi;
@@ -133,23 +141,26 @@ public class Spielfeld {
 
             hinderX = zufallszahl(5, spielBreite-100);
             hinderY = zufallszahl(5, spielLaenge-100);
-            hinderBreite = zufallszahl(50, 100);
-            hinderLaenge = zufallszahl(50, 100);
+            hinderBreite = zufallszahl(100, 200);
+            hinderLaenge = zufallszahl(100, 200);
             hinderPosition = new Punkt(hinderX, hinderY);
             hinderFarbe = zufallsfarbe();
             hinderBezeichnung = "Rechteck" + String.valueOf(arrayIndex+1);
-            Rechteck r = new Rechteck(hinderPosition, hinderBreite, hinderLaenge,hinderBezeichnung, hinderFarbe);
+            Rechteck rechteck = new Rechteck(hinderPosition, hinderBreite, hinderLaenge,hinderBezeichnung, hinderFarbe);
 
             while( arrayUeberlapptIndex < hindernisListe.size() &&
-                    !(r.ueberlappt(hindernisListe.get(arrayUeberlapptIndex)))){
+                    rechteck.ueberlappt(hindernisListe)==false){
                 arrayUeberlapptIndex ++;
             }
-            if(arrayUeberlapptIndex == hindernisListe.size()){
-                hindernisListe.add(r);
-                r.ausgabeAttribute();
-                arrayIndex ++;
+
+            if (arrayUeberlapptIndex == hindernisListe.size()
+                    && (rechteck.ueberlappt(hindernisListe)==false)) {
+                hindernisListe.add(rechteck);
+                rechteck.ausgabeAttribute();
+                arrayIndex++;
                 arrayUeberlapptIndex = 0;
             }
+
         }
         System.out.println("Es wird "+ hindernisListe.size() +" Hindernisse erzeugt");
         return hindernisListe;

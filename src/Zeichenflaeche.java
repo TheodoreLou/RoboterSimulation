@@ -48,8 +48,8 @@ public class Zeichenflaeche extends JPanel implements Runnable{
     public void run(){
         while(true){
             try{
-                //Spielfeld.hindernisseUmfahren();
-                Spielfeld.kurzenWegabfahren();
+                Spielfeld.hindernisseUmfahren();
+                //Spielfeld.kurzenWegabfahren();
                 this.repaint();
                 Thread.sleep(15);
             }

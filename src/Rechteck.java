@@ -1,5 +1,8 @@
 
 import java.awt.Color;
+import java.security.cert.PKIXRevocationChecker;
+import java.util.ArrayList;
+
 
 public class Rechteck extends Figur{
 
@@ -27,25 +30,19 @@ public class Rechteck extends Figur{
         return new Punkt(this.getPosition().getX(), this.getPosition().getY());
     }
 
-    public boolean ueberlappt (Rechteck r) {
+    public boolean ueberlappt (ArrayList<Rechteck> rechteckArrayList) {
         //如果后面障碍物出现重叠或粘滞，则回这里找问题。
-        boolean thisLeft    = (r.getPosition().getX() - this.getPosition().getX()) > this.getPosition().getX();
-        boolean thisUp      = (r.getPosition().getY() - this.getPosition().getY()) > this.getPosition().getY();
-        if ((thisLeft &&
-                r.getPosition().getX() > (this.getPosition().getX() + this.getBreite())) ||
-                (thisUp && r.getPosition().getY() > (this.getPosition().getY() + this.getLaenge()))
-                        && (r.getPosition().getX()+r.getBreite() < this.getPosition().getX()+r.getBreite())
-                        && (r.getPosition().getY()+r.getLaenge() < this.getPosition().getY()+r.getLaenge()))
-        {
-            return false;
+        //已解决，使用方法：投影法
+        //Projektion
+        // https://leetcode-cn.com/problems/rectangle-overlap/solution/tu-jie-jiang-ju-xing-zhong-die-wen-ti-zhuan-hua-we/
+        boolean ueberlapptResult = false;
+        for(Rechteck rechteck : rechteckArrayList){
+            boolean ueberlapptAufX = !(this.maxX()<rechteck.minX()||rechteck.maxX()<this.minX());
+            boolean ueberlapptAufY = !(this.maxY()<rechteck.minY()||rechteck.maxY()<this.minY());
+            if (ueberlapptAufX || ueberlapptAufY) {
+            ueberlapptResult = true;}
         }
-        else if((!thisLeft && this.getPosition().getX() > (r.getPosition().getX() + r.getBreite()))
-                || (!thisUp && this.getPosition().getY() > (r.getPosition().getY() + r.getLaenge()))) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        return ueberlapptResult;
     }
 
     public int minX() {
