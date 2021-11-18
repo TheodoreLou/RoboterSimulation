@@ -7,7 +7,6 @@ public class Leinwand {
 
     private JFrame fenster;
     private Zeichenflaeche zeichenflaeche;
-    private static Thread thread;
 
     public Leinwand(int laenge, int breite, Color hintergrundfarbe){
 
@@ -21,7 +20,7 @@ public class Leinwand {
 
     public static void warten(long millisekunden) {
         try{
-            thread.sleep(millisekunden);
+            Thread.sleep(millisekunden);
         }catch (Exception e)
         {
             // Exception ignorieren

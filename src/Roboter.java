@@ -63,7 +63,7 @@ public class Roboter extends Kreis{
                         break;
                     case HERSTELLER:
                         if(frage.contains("HERSTELLER")) {
-                            System.out.println("Ich bin von Sony produziert.");
+                            System.out.println("Ich bin von Nobody produziert.");
                         }
                         break;
                     case GESCHLECHT:
@@ -73,24 +73,30 @@ public class Roboter extends Kreis{
                         break;
                     case UMFAHREN:
                         if(frage.contains("UMFAHREN")) {
-                            //这个是调用最短路径的方法
-                            Spielfeld s = new Spielfeld();
-                            Roboter roboter = new Roboter();
-                            Rechteck rechteck = new Rechteck(new Punkt(400,400),0,0,"a", Color.BLACK);
-                            ArrayList<Rechteck> rechtecks1 = new ArrayList<>();
-                            rechtecks1.add(0,rechteck);
-                            ArrayList<Punkt> poiSort = s.poiSortieren(s.punkteEingeben());
-                            for(Punkt punkt : poiSort){
-                                punkt.ausgabeAttribute();
-                            }
-                            s.zeichnen(rechtecks1,  roboter, poiSort);
-                            s.kurzenWegabfahren();
-
+                            //这个是规避障碍的方法
+                            Spielfeld spielfeld = new Spielfeld();
+                            ArrayList<Rechteck> rechtecks = spielfeld.hindernislisteErzeugen();
+                            ArrayList<Punkt> punkts = new ArrayList<>();
+                            Punkt punkt = new Punkt(0,0);
+                            punkts.add(0,punkt);
+                            spielfeld.zeichnen(rechtecks, this, punkts);
+                            Spielfeld.hindernisseUmfahren();
                         }
+                        break;
                     case PUNKTE:
                         if(frage.contains("PUNKTE")) {
-
+                            //这个是调用最短路径的方法
+                            Spielfeld s = new Spielfeld();
+                            Rechteck rechteck = new Rechteck(new Punkt(400,400),0,0,"a", Color.BLACK);
+                            ArrayList<Rechteck> rechtecks = new ArrayList<>();
+                            rechtecks.add(0,rechteck);
+                            s.zeichnen(rechtecks, this, s.poiSortieren(s.punkteEingeben()));
+                            Spielfeld.kurzenWegabfahren();
                         }
+                        break;
+                    default:
+                        System.out.println("Bitte auf korrekte Rechtschreibung achten!");
+                        break;
                 /* Verwenden Sie eine Switch-Case-Ver-zweigung,
                 um dem gefundenen Stichwort
                 eine zuvor von Ihnen festgelegte Antwort zuzuweisen*/

@@ -201,15 +201,15 @@ public class Spielfeld {
        die Hindernisse umzufahren.*/
         roboter.setRoboterGeschwindigkeitX(1);
         roboter.setRoboterGeschwindigkeitY(1);
-        if (roboter.maxX() < 780 & roboter.maxY() < 750) {
+        if (roboter.maxX() < 800 & roboter.maxY() < 760) {
             for (Rechteck rechteck : hindernisListe) {
-                if (roboter.ZuNah_untere(rechteck) || roboter.getPosition().getY() > 750) {
+                if (roboter.ZuNah_untere(rechteck) || roboter.getPosition().getY() >= 760) {
                     roboter.setRoboterGeschwindigkeitY(0);
-                } else if (roboter.ZuNah_rechte(rechteck) ||
-                        roboter.getPosition().getX() > 780) {
+                }else if (roboter.ZuNah_rechte(rechteck) ||
+                        roboter.getPosition().getX() >= 800) {
                     roboter.setRoboterGeschwindigkeitX(0);
-                } else if (roboter.ZuNah_rechte(rechteck) && roboter.ZuNah_untere(rechteck)
-                        || roboter.getPosition().getY() > 750 && roboter.getPosition().getX() > 780) {
+                }else if ((roboter.ZuNah_rechte(rechteck) && roboter.ZuNah_untere(rechteck))
+                        || (roboter.getPosition().getY() >= 760 && roboter.getPosition().getX() >= 800)) {
                     roboter.setRoboterGeschwindigkeitX(0);
                     roboter.setRoboterGeschwindigkeitY(0);
                 }

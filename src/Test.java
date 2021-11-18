@@ -1,6 +1,3 @@
-import java.awt.*;
-import java.util.ArrayList;
-
 public class Test {
     public static void main(String args[]) {
 
@@ -21,8 +18,9 @@ public class Test {
         System.out.println("Für die Funktion : hindernisseUmfahren bitten Sie mit 'UMFAHREN'");
         System.out.println("Für die Funktion : kurzenWegAbfahren bitten Sie mit 'PUNKTE'");
         System.out.println("ein schönes Tag!");
-
-        /*这个是调用最短路径的方法
+        Roboter roboter = new Roboter();
+        roboter.spacherkennung();
+        /*//这个是调用最短路径的方法
         Spielfeld s = new Spielfeld();
         Roboter roboter = new Roboter();
         Rechteck rechteck = new Rechteck(new Punkt(400,400),0,0,"a", Color.BLACK);
@@ -43,6 +41,6 @@ public class Test {
         Punkt punkt = new Punkt(0,0);
         punkts.add(0,punkt);
         spielfeld.zeichnen(rechtecks, roboter, punkts);
-        spielfeld.hindernisseUmfahren();*/
+        Spielfeld.hindernisseUmfahren();*/
     }
 }

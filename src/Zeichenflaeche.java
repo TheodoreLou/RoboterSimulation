@@ -45,15 +45,21 @@ public class Zeichenflaeche extends JPanel implements Runnable{
         this.repaint();
     }
 
+
+
     public void run(){
         while(true){
             try{
-                Spielfeld.hindernisseUmfahren();
-                //Spielfeld.kurzenWegabfahren();
+                if(hindernisse.size() == 1){
+                    Spielfeld.kurzenWegabfahren();
+                }
+                if(poiSort.size() == 1){
+                    Spielfeld.hindernisseUmfahren();
+                }
                 this.repaint();
-                Thread.sleep(15);
+                Leinwand.warten(15);
             }
-            catch(Exception e){
+            catch(Exception ignored){
 
             }
 
