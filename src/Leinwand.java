@@ -1,5 +1,4 @@
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
 
@@ -8,7 +7,8 @@ public class Leinwand {
     private JFrame fenster;
     private Zeichenflaeche zeichenflaeche;
 
-    public Leinwand(int laenge, int breite, Color hintergrundfarbe){
+
+    public Leinwand(int laenge, int breite){
 
         fenster = new JFrame();
         fenster.setSize(breite,laenge);
@@ -31,9 +31,20 @@ public class Leinwand {
         zeichenflaeche = new Zeichenflaeche(hindernisse, roboter, poiSort);
         Thread t = new Thread(zeichenflaeche);
         t.start();
-        //zeichenflaeche.repaintFiguren(hindernisse,poiSort);
         fenster.add(zeichenflaeche);
         fenster.setVisible(true);
     }
 
+    public void resetFrame(){
+        fenster.setVisible(false);
+        fenster.getContentPane().removeAll();
+        fenster.repaint();
+    }
+    /*public static Leinwand gibLeinwand() {//Es kann nur eine Leinwand geben
+        if (leinwandSingleton == null) {
+            leinwandSingleton = new Leinwand();
+        }
+        leinwandSingleton.setVisible(false);
+        return leinwandSingleton;
+    }*/
 }

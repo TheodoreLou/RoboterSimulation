@@ -11,12 +11,12 @@ public class Spielfeld {
     private static ArrayList<Punkt> poiSort = new ArrayList<>();
     private static ArrayList<Rechteck> hindernisListe;
     private static Roboter roboter;
-    private static Leinwand leinwand;
+    private Leinwand leinwand;
 
 
     public Spielfeld() {
         roboter = new Roboter();
-        leinwand = new Leinwand(spielLaenge,spielBreite,Color.white);
+        leinwand = new Leinwand(spielLaenge,spielBreite);
     }
     /*
     Erstellen Sie die Methode Punkt[] punkteEingeben(). Der Benutzer soll zunaechst
@@ -149,12 +149,12 @@ public class Spielfeld {
             Rechteck rechteck = new Rechteck(hinderPosition, hinderBreite, hinderLaenge,hinderBezeichnung, hinderFarbe);
 
             while( arrayUeberlapptIndex < hindernisListe.size() &&
-                    rechteck.ueberlappt(hindernisListe)==false){
+                    !rechteck.ueberlappt(hindernisListe)){
                 arrayUeberlapptIndex ++;
             }
 
             if (arrayUeberlapptIndex == hindernisListe.size()
-                    && (rechteck.ueberlappt(hindernisListe)==false)) {
+                    && (!rechteck.ueberlappt(hindernisListe))) {
                 hindernisListe.add(rechteck);
                 rechteck.ausgabeAttribute();
                 arrayIndex++;
@@ -184,6 +184,18 @@ public class Spielfeld {
         leinwand.zeichnen(hindernisListe,roboter,poiSort);
     }
 
+    public void reset() {
+        hindernisListe = new ArrayList<Rechteck>();
+        //this.poi = new Punkt[];
+        this.poiOrigi = new ArrayList<Punkt>();
+        for(int i = 1 ; i < poiSort.size() ; i++) {
+            poiSort.remove(i);
+        }
+        leinwand.resetFrame();
+        roboter.setPosition(new Punkt(0, 0));
+        roboter.setRoboterGeschwindigkeitX(0);
+        roboter.setRoboterGeschwindigkeitY(0);
+    }
     /*
      * Der Roboter soll sich zu Beginn oben links
      * auf dem Spielfeld befinden und sich schrittweise nach unten und nach rechts bis zum
@@ -194,22 +206,27 @@ public class Spielfeld {
      */
 
     public static void hindernisseUmfahren() {
+
         /*
        die Method daher ist;
        ich habe in dem Klass Roboter ein "int" heißt Geschwindigkeit geschafft
        Und Mit die Veränderung von Geschwindigkeit von verschiedene Sitiation um
        die Hindernisse umzufahren.*/
-        roboter.setRoboterGeschwindigkeitX(1);
-        roboter.setRoboterGeschwindigkeitY(1);
-        if (roboter.maxX() < 800 & roboter.maxY() < 760) {
+        //roboter.setRoboterGeschwindigkeitX(1);
+        //roboter.setRoboterGeschwindigkeitY(1);
+        if (roboter.maxX() < 790 & roboter.maxY() < 760) {
+            roboter.setRoboterGeschwindigkeitX(1);
+            roboter.setRoboterGeschwindigkeitY(1);
             for (Rechteck rechteck : hindernisListe) {
                 if (roboter.ZuNah_untere(rechteck) || roboter.getPosition().getY() >= 760) {
+                    roboter.setRoboterGeschwindigkeitX(1);
                     roboter.setRoboterGeschwindigkeitY(0);
                 }else if (roboter.ZuNah_rechte(rechteck) ||
-                        roboter.getPosition().getX() >= 800) {
+                        roboter.getPosition().getX() >= 790) {
                     roboter.setRoboterGeschwindigkeitX(0);
+                    roboter.setRoboterGeschwindigkeitY(1);
                 }else if ((roboter.ZuNah_rechte(rechteck) && roboter.ZuNah_untere(rechteck))
-                        || (roboter.getPosition().getY() >= 760 && roboter.getPosition().getX() >= 800)) {
+                        || (roboter.getPosition().getY() >= 760 && roboter.getPosition().getX() >= 790)) {
                     roboter.setRoboterGeschwindigkeitX(0);
                     roboter.setRoboterGeschwindigkeitY(0);
                 }
@@ -221,16 +238,18 @@ public class Spielfeld {
     }
 
     public static void kurzenWegabfahren() {
+
         //diese Method ist noch problematisch
         //Es gibt noch ein "BUG"; wenn 2 Punkte auf eine gleich Achse ligen, dann wird das Roboter nocht mehr bewegen.
         //Ich weiß wahrscheinlich,dass das Problem von Richten ist.
-        roboter.setRoboterGeschwindigkeitX(1);
-        roboter.setRoboterGeschwindigkeitY(1);
+
         //die Meinung von dieser Methode ist; denn die kleinest Zahl von natürliche Ganzzahl ist 1.
         //So muss ich mit "1' bearbeiten. 1 und 0,damit ich alle richtung und schaffen soll.
         //wenn ich habe andere Chance, werder ich alle Dinge als "float" oder "double" variieren..:(
         //denn das kann man die Richtung besser steuern.
         if (roboter.maxX() < 780 & roboter.maxY() < 750) {
+            roboter.setRoboterGeschwindigkeitX(1);
+            roboter.setRoboterGeschwindigkeitY(1);
             for (int i = 1;i<poiSort.size();i++) {
                 if(roboter.getPosition().getX()-poiSort.get(i).getX() == 0){
                     if(roboter.getPosition().getY()>poiSort.get(i).getY()){

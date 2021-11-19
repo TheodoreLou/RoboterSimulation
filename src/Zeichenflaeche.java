@@ -39,9 +39,10 @@ public class Zeichenflaeche extends JPanel implements Runnable{
         }
     }
 
-    public void repaintFiguren(ArrayList<Rechteck> figuren,ArrayList<Punkt> poiSort){
-        hindernisse = figuren;
+    public void repaintFiguren(ArrayList<Rechteck> hindernisse,ArrayList<Punkt> poiSort,Roboter roboter){
+        this.hindernisse = hindernisse;
         this.poiSort = poiSort;
+        this.roboter  = roboter;
         this.repaint();
     }
 
