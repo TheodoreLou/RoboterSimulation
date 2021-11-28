@@ -6,7 +6,7 @@ public class Leinwand {
 
     private JFrame fenster;
     private Zeichenflaeche zeichenflaeche;
-
+    private static Thread thread = new Thread();
 
     public Leinwand(int laenge, int breite){
 
@@ -29,22 +29,16 @@ public class Leinwand {
 
     public void zeichnen(ArrayList<Rechteck> hindernisse , Roboter roboter , ArrayList<Punkt> poiSort) {
         zeichenflaeche = new Zeichenflaeche(hindernisse, roboter, poiSort);
-        Thread t = new Thread(zeichenflaeche);
-        t.start();
+        thread = new Thread(zeichenflaeche);
+        thread.start();
         fenster.add(zeichenflaeche);
         fenster.setVisible(true);
     }
 
     public void resetFrame(){
         fenster.setVisible(false);
+        thread.interrupt();
         fenster.getContentPane().removeAll();
         fenster.repaint();
     }
-    /*public static Leinwand gibLeinwand() {//Es kann nur eine Leinwand geben
-        if (leinwandSingleton == null) {
-            leinwandSingleton = new Leinwand();
-        }
-        leinwandSingleton.setVisible(false);
-        return leinwandSingleton;
-    }*/
 }

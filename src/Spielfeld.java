@@ -12,11 +12,13 @@ public class Spielfeld {
     private static ArrayList<Rechteck> hindernisListe;
     private static Roboter roboter;
     private Leinwand leinwand;
+    private static int x = 0;
+    private static int y = 0;
 
 
     public Spielfeld() {
         roboter = new Roboter();
-        leinwand = new Leinwand(spielLaenge,spielBreite);
+        leinwand = new Leinwand(spielLaenge, spielBreite);
     }
     /*
     Erstellen Sie die Methode Punkt[] punkteEingeben(). Der Benutzer soll zunaechst
@@ -48,10 +50,10 @@ public class Spielfeld {
                 int x = punktX.nextInt();
                 int y = punktY.nextInt();
                 Punkt p = new Punkt(x, y);
-                if(x < 0||y < 0){
+                if (x < 0 || y < 0) {
                     System.out.println("die Zahl muss eine positive Zahl sein!");
                     System.exit(0);
-                }else if(x > 800 || y > 800){
+                } else if (x > 800 || y > 800) {
                     System.out.println("der Punkt ist außer der Leinwand!");
                     System.exit(0);
                 }
@@ -59,7 +61,7 @@ public class Spielfeld {
                 System.out.println("der " + i + ". Punkt ist: ");
                 poi[i].ausgabeAttribute();
             }
-        }catch(InputMismatchException e){//The catch statement allows you to define a block of code to be executed, if an error occurs in the try block.
+        } catch (InputMismatchException e) {//The catch statement allows you to define a block of code to be executed, if an error occurs in the try block.
             System.out.println("Bitten Sie daher nur Ganzzahlen eingeben! \n" + e);
         }
 
@@ -72,7 +74,7 @@ public class Spielfeld {
     */
 
     public ArrayList<Punkt> poiSortieren(Punkt[] poi) {
-        for(int i = 0; i<poi.length;i++){
+        for (int i = 0; i < poi.length; i++) {
             poiOrigi.add(i, poi[i]);
         }
         poiSort.add(poiOrigi.remove(0));
@@ -93,6 +95,7 @@ public class Spielfeld {
         }
         return poiSort;
     }
+
     /*
      * Methode poiAbfahren(), in der der Benutzer zunaechst
      * die Punkte eingeben kann und anschliessend der kuerzeste Weg berechnet wird
@@ -128,7 +131,7 @@ public class Spielfeld {
             Scanner h = new Scanner(System.in);//mittels scanner ueber Konsole werte zuweisen
             System.out.println("die Hindersniszahl ist " + h);
             hindernisZahl = h.nextInt();
-            if(hindernisZahl > maximalHindernisZahl) {
+            if (hindernisZahl > maximalHindernisZahl) {
                 System.out.println("diese Zahl ist mehr als maximale Hinderniszahl");
                 System.exit(0);
             }
@@ -137,20 +140,20 @@ public class Spielfeld {
             System.exit(0);
         }
 
-        while(arrayIndex < hindernisZahl) {
+        while (arrayIndex < hindernisZahl) {
 
-            hinderX = zufallszahl(5, spielBreite-100);
-            hinderY = zufallszahl(5, spielLaenge-100);
+            hinderX = zufallszahl(5, spielBreite - 100);
+            hinderY = zufallszahl(5, spielLaenge - 100);
             hinderBreite = zufallszahl(100, 200);
             hinderLaenge = zufallszahl(100, 200);
             hinderPosition = new Punkt(hinderX, hinderY);
             hinderFarbe = zufallsfarbe();
-            hinderBezeichnung = "Rechteck" + String.valueOf(arrayIndex+1);
-            Rechteck rechteck = new Rechteck(hinderPosition, hinderBreite, hinderLaenge,hinderBezeichnung, hinderFarbe);
+            hinderBezeichnung = "Rechteck" + String.valueOf(arrayIndex + 1);
+            Rechteck rechteck = new Rechteck(hinderPosition, hinderBreite, hinderLaenge, hinderBezeichnung, hinderFarbe);
 
-            while( arrayUeberlapptIndex < hindernisListe.size() &&
-                    !rechteck.ueberlappt(hindernisListe)){
-                arrayUeberlapptIndex ++;
+            while (arrayUeberlapptIndex < hindernisListe.size() &&
+                    !rechteck.ueberlappt(hindernisListe)) {
+                arrayUeberlapptIndex++;
             }
 
             if (arrayUeberlapptIndex == hindernisListe.size()
@@ -162,9 +165,10 @@ public class Spielfeld {
             }
 
         }
-        System.out.println("Es wird "+ hindernisListe.size() +" Hindernisse erzeugt");
+        System.out.println("Es wird " + hindernisListe.size() + " Hindernisse erzeugt");
         return hindernisListe;
     }
+
     /*
     * Diese Methoden erzeugen eine zufaellige Anzahl an Rechtecken, in zufaelligen Farben und ueberpruefen die
     Ueberlappung dieser.
@@ -175,20 +179,20 @@ public class Spielfeld {
     }
 
     public Color zufallsfarbe() {
-        Color farbe = new Color(zufallszahl(1,254),zufallszahl(1,254), zufallszahl(1,254));
+        Color farbe = new Color(zufallszahl(1, 254), zufallszahl(1, 254), zufallszahl(1, 254));
         return farbe;
     }
 
-    public void zeichnen(ArrayList<Rechteck> hindernisListe,Roboter roboter,ArrayList<Punkt> poiSort) {
+    public void zeichnen(ArrayList<Rechteck> hindernisListe, Roboter roboter, ArrayList<Punkt> poiSort) {
         this.roboter = roboter;
-        leinwand.zeichnen(hindernisListe,roboter,poiSort);
+        leinwand.zeichnen(hindernisListe, roboter, poiSort);
     }
 
     public void reset() {
         hindernisListe = new ArrayList<Rechteck>();
         //this.poi = new Punkt[];
         this.poiOrigi = new ArrayList<Punkt>();
-        for(int i = 1 ; i < poiSort.size() ; i++) {
+        for (int i = 1; i < poiSort.size(); i++) {
             poiSort.remove(i);
         }
         leinwand.resetFrame();
@@ -221,17 +225,17 @@ public class Spielfeld {
                 if (roboter.ZuNah_untere(rechteck) || roboter.getPosition().getY() >= 760) {
                     roboter.setRoboterGeschwindigkeitX(1);
                     roboter.setRoboterGeschwindigkeitY(0);
-                }else if (roboter.ZuNah_rechte(rechteck) ||
+                } else if (roboter.ZuNah_rechte(rechteck) ||
                         roboter.getPosition().getX() >= 790) {
                     roboter.setRoboterGeschwindigkeitX(0);
                     roboter.setRoboterGeschwindigkeitY(1);
-                }else if ((roboter.ZuNah_rechte(rechteck) && roboter.ZuNah_untere(rechteck))
+                } else if ((roboter.ZuNah_rechte(rechteck) && roboter.ZuNah_untere(rechteck))
                         || (roboter.getPosition().getY() >= 760 && roboter.getPosition().getX() >= 790)) {
                     roboter.setRoboterGeschwindigkeitX(0);
                     roboter.setRoboterGeschwindigkeitY(0);
                 }
             }
-            roboter.setPosition(new Punkt(    roboter.getPosition().getX() + roboter.getRoboterGeschwindigkeitX(),
+            roboter.setPosition(new Punkt(roboter.getPosition().getX() + roboter.getRoboterGeschwindigkeitX(),
                     roboter.getPosition().getY() + roboter.getRoboterGeschwindigkeitY()));
         }
 
@@ -247,80 +251,93 @@ public class Spielfeld {
         //So muss ich mit "1' bearbeiten. 1 und 0,damit ich alle richtung und schaffen soll.
         //wenn ich habe andere Chance, werder ich alle Dinge als "float" oder "double" variieren..:(
         //denn das kann man die Richtung besser steuern.
-        if (roboter.maxX() < 780 & roboter.maxY() < 750) {
-            roboter.setRoboterGeschwindigkeitX(1);
-            roboter.setRoboterGeschwindigkeitY(1);
-            for (int i = 1;i<poiSort.size();i++) {
-                if(roboter.getPosition().getX()-poiSort.get(i).getX() == 0){
-                    if(roboter.getPosition().getY()>poiSort.get(i).getY()){
-                        roboter.setRoboterGeschwindigkeitY(-1);
-                    }
+
+        roboter.setRoboterGeschwindigkeitX(1);
+        roboter.setRoboterGeschwindigkeitY(1);
+        for (int i = 1;i<poiSort.size();i++) {
+            if(roboter.getPosition().getX()-poiSort.get(i).getX() == 0){
+                if(roboter.getPosition().getY() > poiSort.get(i).getY()){
                     roboter.setRoboterGeschwindigkeitX(0);
+                    roboter.setRoboterGeschwindigkeitY(-1);
                 }
-                if(roboter.getPosition().getY()-poiSort.get(i).getY() == 0){
-                    if(roboter.getPosition().getX()>poiSort.get(i).getX()){
-                        roboter.setRoboterGeschwindigkeitX(-1);
-                    }
+                else if(roboter.getPosition().getY()<poiSort.get(i).getY()) {
+                    roboter.setRoboterGeschwindigkeitX(0);
+                    roboter.setRoboterGeschwindigkeitY(1);
+                }
+            }
+            if(roboter.getPosition().getY()-poiSort.get(i).getY() == 0){
+                if(roboter.getPosition().getX()>poiSort.get(i).getX()){
+                    roboter.setRoboterGeschwindigkeitX(-1);
                     roboter.setRoboterGeschwindigkeitY(0);
                 }
-                if(roboter.getPosition().getX()-poiSort.get(i).getX() == 0
-                        && roboter.getPosition().getY()-poiSort.get(i).getY() == 0
-                        && roboter.getPosition().gibAbstand(poiSort.get(poiSort.size()-1))!=0 ){
-                    // 4 Richtung:Linksoben,linksunten,rechtsoben,rechtsunten
-                    if(roboter.getPosition().getX()>poiSort.get(i+1).getX()&&
-                            roboter.getPosition().getY()>poiSort.get(i+1).getY()){
-                        roboter.setRoboterGeschwindigkeitX(-1);
-                        roboter.setRoboterGeschwindigkeitY(-1);
-                    }//linksoben
-                    else if(roboter.getPosition().getX()>poiSort.get(i+1).getX()&&
-                            roboter.getPosition().getY()<poiSort.get(i+1).getY()){
-                        roboter.setRoboterGeschwindigkeitX(-1);
-                        roboter.setRoboterGeschwindigkeitY(1);
-                    }//linksunten
-                    else if(roboter.getPosition().getX()<poiSort.get(i+1).getX()&&
-                            roboter.getPosition().getY()>poiSort.get(i+1).getY()){
-                        roboter.setRoboterGeschwindigkeitX(1);
-                        roboter.setRoboterGeschwindigkeitY(-1);
-                    }//rechtsoben
-                    else if(roboter.getPosition().getX()<poiSort.get(i+1).getX()&&
-                            roboter.getPosition().getY()<poiSort.get(i+1).getY()){
-                        roboter.setRoboterGeschwindigkeitX(1);
-                        roboter.setRoboterGeschwindigkeitY(1);
-                    }
-                    //4 Linie:links,rechts,oben,unten
-                    else if(roboter.getPosition().getX()==poiSort.get(i+1).getX()&&
-                            roboter.getPosition().getY()<poiSort.get(i+1).getY()){
-                        roboter.setRoboterGeschwindigkeitX(0);
-                        roboter.setRoboterGeschwindigkeitY(1);
-                    }
-                    else if(roboter.getPosition().getX()==poiSort.get(i+1).getX()&&
-                            roboter.getPosition().getY()>poiSort.get(i+1).getY()){
-                        roboter.setRoboterGeschwindigkeitX(0);
-                        roboter.setRoboterGeschwindigkeitY(-1);
-                    }
-                    else if(roboter.getPosition().getX()>poiSort.get(i+1).getX()&&
-                            roboter.getPosition().getY()==poiSort.get(i+1).getY()){
-                        roboter.setRoboterGeschwindigkeitX(-1);
-                        roboter.setRoboterGeschwindigkeitY(0);
-                    }
-                    else if(roboter.getPosition().getX()<poiSort.get(i+1).getX()&&
-                            roboter.getPosition().getY()==poiSort.get(i+1).getY()){
-                        roboter.setRoboterGeschwindigkeitX(1);
-                        roboter.setRoboterGeschwindigkeitY(0);
-                    }
-                }
-                if(roboter.getPosition().getX()-poiSort.get(i).getX() == 0
-                        &&roboter.getPosition().getY()-poiSort.get(i).getY() == 0
-                        &&roboter.getPosition().gibAbstand(poiSort.get(poiSort.size()-1))==0){
-                    roboter.setRoboterGeschwindigkeitX(0);
+                else if(roboter.getPosition().getX()<poiSort.get(i).getX()){
+                    roboter.setRoboterGeschwindigkeitX(1);
                     roboter.setRoboterGeschwindigkeitY(0);
                 }
             }
-            roboter.setPosition(new Punkt(roboter.getPosition().getX()+roboter.getRoboterGeschwindigkeitX(),
-                    roboter.getPosition().getY()+roboter.getRoboterGeschwindigkeitY()));
+            if(roboter.getPosition().getX()-poiSort.get(i).getX() == 0
+                    && roboter.getPosition().getY()-poiSort.get(i).getY() == 0
+                    && roboter.getPosition().gibAbstand(poiSort.get(poiSort.size()-1)) != 0 ){
+                // 4 Richtung:Linksoben,linksunten,rechtsoben,rechtsunten
+                if(roboter.getPosition().getX()>poiSort.get(i+1).getX()&&
+                        roboter.getPosition().getY()>poiSort.get(i+1).getY()){
+                    roboter.setRoboterGeschwindigkeitX(-1);
+                    roboter.setRoboterGeschwindigkeitY(-1);
+                }//linksoben
+                else if(roboter.getPosition().getX()>poiSort.get(i+1).getX()&&
+                        roboter.getPosition().getY()<poiSort.get(i+1).getY()){
+                    roboter.setRoboterGeschwindigkeitX(-1);
+                    roboter.setRoboterGeschwindigkeitY(1);
+                }//linksunten
+                else if(roboter.getPosition().getX()<poiSort.get(i+1).getX()&&
+                        roboter.getPosition().getY()>poiSort.get(i+1).getY()){
+                    roboter.setRoboterGeschwindigkeitX(1);
+                    roboter.setRoboterGeschwindigkeitY(-1);
+                }//rechtsoben
+                else if(roboter.getPosition().getX()<poiSort.get(i+1).getX()&&
+                        roboter.getPosition().getY()<poiSort.get(i+1).getY()){
+                    roboter.setRoboterGeschwindigkeitX(1);
+                    roboter.setRoboterGeschwindigkeitY(1);
+                }
+                /*//4 Linie:links,rechts,oben,unten
+                else if(roboter.getPosition().getX()==poiSort.get(i+1).getX()&&
+                        roboter.getPosition().getY()<poiSort.get(i+1).getY()){
+                    roboter.setRoboterGeschwindigkeitX(0);
+                    roboter.setRoboterGeschwindigkeitY(1);
+                }
+                else if(roboter.getPosition().getX()==poiSort.get(i+1).getX()&&
+                        roboter.getPosition().getY()>poiSort.get(i+1).getY()){
+                    roboter.setRoboterGeschwindigkeitX(0);
+                    roboter.setRoboterGeschwindigkeitY(-1);
+                }
+                else if(roboter.getPosition().getX()>poiSort.get(i+1).getX()&&
+                        roboter.getPosition().getY()==poiSort.get(i+1).getY()){
+                    roboter.setRoboterGeschwindigkeitX(-1);
+                    roboter.setRoboterGeschwindigkeitY(0);
+                }
+                else if(roboter.getPosition().getX()<poiSort.get(i+1).getX()&&
+                        roboter.getPosition().getY()==poiSort.get(i+1).getY()){
+                    roboter.setRoboterGeschwindigkeitX(1);
+                    roboter.setRoboterGeschwindigkeitY(0);
+                }*/
+            }
+            if(roboter.getPosition().getX() == poiSort.get(i).getX()
+                    &&roboter.getPosition().getY() == poiSort.get(i).getY()
+                    &&roboter.getPosition().gibAbstand(poiSort.get(poiSort.size()-1))==0){
+                roboter.setRoboterGeschwindigkeitX(0);
+                roboter.setRoboterGeschwindigkeitY(0);
+                break;
+            }
         }
+        roboter.setPosition(new Punkt(roboter.getPosition().getX() + roboter.getRoboterGeschwindigkeitX(),
+                roboter.getPosition().getY() + roboter.getRoboterGeschwindigkeitY()));
+
     }
 }
+
+
+
+
 
 
 
